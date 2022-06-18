@@ -1,0 +1,2 @@
+folder routes ~ folder handler
+_grpc.pb.go ~ service layer
