@@ -1,8 +1,8 @@
-syntax = "proto3";
+syntax = "proto3"; // ini adalah bahasa yang digunakan
 
-option go_package = "./pb";
+option go_package = "./pb"; // ini untuk menentukan di mana hasil generate file .proto akan disimpan
 
-package proto;
+package proto;  // ini optional, biasanya digunakan ketika ada lebih dari satu .proto file
 
 message RequestMessage {
   string body = 1;
