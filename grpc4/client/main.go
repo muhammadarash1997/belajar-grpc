@@ -24,6 +24,7 @@ func main() {
 	client := pb.NewDataStudentClient(conn)
 	getDataStudentByEmail(client, "dimas@gmail.com")
 	getDataStudentByEmail(client, "arash@gmail.com")
+	getDataAllStudents(client)
 }
 
 func getDataStudentByEmail(client pb.DataStudentClient, email string) {
@@ -37,4 +38,16 @@ func getDataStudentByEmail(client pb.DataStudentClient, email string) {
 	}
 
 	fmt.Println(student)
+}
+
+func getDataAllStudents(client pb.DataStudentClient) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	students, err := client.GetAllStudents(ctx, &pb.Empty{})
+	if err != nil {
+		log.Fatalln("Error get all students")
+	}
+
+	fmt.Println(students.GetStudents())
 }

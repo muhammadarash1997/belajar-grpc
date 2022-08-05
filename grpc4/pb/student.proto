@@ -6,6 +6,13 @@ package proto;
 
 service DataStudent {
     rpc FindStudentByEmail (Student) returns (Student);
+    rpc GetAllStudents (Empty) returns (Students);
+}
+
+message Empty {}
+
+message Students {
+    repeated Student students = 1;
 }
 
 message Student {

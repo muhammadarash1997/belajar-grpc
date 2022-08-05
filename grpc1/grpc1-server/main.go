@@ -20,10 +20,11 @@ func main() {
 	// Create gRPC Server
 	grpcServer := grpc.NewServer()
 
-	// Register Server API (Service) into gRPC Server and then the gRPC Server will has services from Server API (Service)
+	// Register Service Server into gRPC Server so that the gRPC Server will has services
 	pb.RegisterChatServiceServer(grpcServer, &chat.Server{})
 	log.Printf("server listening at %v", lis.Addr())
 
+	// Listen and Serve of Listener and gRPC Server
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

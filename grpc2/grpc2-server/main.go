@@ -24,10 +24,11 @@ func main() {
 	// Create gRPC Server
 	grpcServer := grpc.NewServer()
 
-	// Register Server API (Service) into gRPC Server and then the gRPC Server will has services from Server API (Service)
+	// Register Service Server into gRPC Server so that the gRPC Server will has services
 	pb.RegisterAddServiceServer(grpcServer, &server{})
 	// reflection.Register(grpcServer)
 
+	// Listen and Server of Listener and gRPC Server
 	if e := grpcServer.Serve(listener); e != nil {
 		panic(e)
 	}

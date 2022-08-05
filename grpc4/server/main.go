@@ -28,6 +28,12 @@ func (d *dataStudentServer) FindStudentByEmail(ctx context.Context, student *pb.
 	return nil, errors.New("Student not found")
 }
 
+func (d *dataStudentServer) GetAllStudents(ctx context.Context, empty *pb.Empty) (*pb.Students, error) {
+	return &pb.Students{
+		Students: d.student,
+	}, nil
+}
+
 func (d *dataStudentServer) loadData() {
 	dataByte, err := ioutil.ReadFile("./data/datas.json")
 	if err != nil {
@@ -47,14 +53,19 @@ func newServer() *dataStudentServer {
 }
 
 func main() {
+	// Create Listener
 	listen, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalln("Error listening", err.Error())
 	}
 
+	// Create gRPC Server
 	grpcServer := grpc.NewServer()
+
+	// Register Service Server to gRPC Server
 	pb.RegisterDataStudentServer(grpcServer, newServer())
 
+	// Listen and Serve of Listener and gRPC Server
 	err = grpcServer.Serve(listen)
 	if err != nil {
 		log.Fatalln("Error serve grpc", err.Error())

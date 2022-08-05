@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/muhammadarash1997/grpc5/pb";
+
+package proto;
+
+service WearableService {
+    rpc BeatsPerSecond (BeatsPerSecondRequest) returns (stream BeatsPerSecondResponse);
+}
+
+message BeatsPerSecondRequest {
+    string uuid = 1;
+}
+
+message BeatsPerSecondResponse {
+    uint32 value = 1;
+    uint32 second = 2;
+}

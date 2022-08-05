@@ -9,13 +9,16 @@ option go_package = "./pb";
 // ini optional, biasanya digunakan ketika ada lebih dari satu .proto file
 package proto;
 
+// message akan digenerate ke file .pb.go
 message RequestMessage {
   string body = 1;
 }
 
+// message akan digenerate ke file .pb.go
 message ResponseMessage {
   string body = 1;
 }
+
 
 service ChatService {
   rpc SayHello(RequestMessage) returns (ResponseMessage) {}

@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DataStudentClient interface {
 	FindStudentByEmail(ctx context.Context, in *Student, opts ...grpc.CallOption) (*Student, error)
+	GetAllStudents(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Students, error)
 }
 
 type dataStudentClient struct {
@@ -42,11 +43,21 @@ func (c *dataStudentClient) FindStudentByEmail(ctx context.Context, in *Student,
 	return out, nil
 }
 
+func (c *dataStudentClient) GetAllStudents(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Students, error) {
+	out := new(Students)
+	err := c.cc.Invoke(ctx, "/proto.DataStudent/GetAllStudents", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DataStudentServer is the server API for DataStudent service.
 // All implementations must embed UnimplementedDataStudentServer
 // for forward compatibility
 type DataStudentServer interface {
 	FindStudentByEmail(context.Context, *Student) (*Student, error)
+	GetAllStudents(context.Context, *Empty) (*Students, error)
 	mustEmbedUnimplementedDataStudentServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedDataStudentServer struct {
 
 func (UnimplementedDataStudentServer) FindStudentByEmail(context.Context, *Student) (*Student, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindStudentByEmail not implemented")
+}
+func (UnimplementedDataStudentServer) GetAllStudents(context.Context, *Empty) (*Students, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllStudents not implemented")
 }
 func (UnimplementedDataStudentServer) mustEmbedUnimplementedDataStudentServer() {}
 
@@ -88,6 +102,24 @@ func _DataStudent_FindStudentByEmail_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DataStudent_GetAllStudents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DataStudentServer).GetAllStudents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.DataStudent/GetAllStudents",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DataStudentServer).GetAllStudents(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DataStudent_ServiceDesc is the grpc.ServiceDesc for DataStudent service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var DataStudent_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindStudentByEmail",
 			Handler:    _DataStudent_FindStudentByEmail_Handler,
+		},
+		{
+			MethodName: "GetAllStudents",
+			Handler:    _DataStudent_GetAllStudents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
